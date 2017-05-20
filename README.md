@@ -8,15 +8,16 @@ There are two classes that must be present the Database class and the JsonifyMyS
 
 You only however need to include the API file.
 
-```$filename = "test_api";
-      $filepath = "files/api";
-      $myQuery = "SELECT * FROM categories";
-      $newHost = "localhost";
-      $newUser = "mgs_user";
-      $newPassword = "pa55word";
-      $dbName = "my_guitar_shop2";
+```
+   $filename = "test_api";
+   $filepath = "files/api";
+   $myQuery = "SELECT * FROM categories";
+   $newHost = "localhost";
+   $newUser = "mgs_user";
+   $newPassword = "pa55word";
+   $dbName = "my_guitar_shop2";
 
-      $api = new JsonifyMySQLRequests($myQuery,$filename,$filepath,$newHost,$newUser,$newPassword,$dbName);
+   $api = new JsonifyMySQLRequests($myQuery,$filename,$filepath,$newHost,$newUser,$newPassword,$dbName);
 ```
 			
 This is the best way to instance the class, It will inturn instance a connection to the database with the given params, and then return the connection instance to the API.JsonifyMySQLRequests
@@ -24,13 +25,13 @@ This call will alos put all the params into the variables to be used.
 To gain access to these varsiables I have provided you with getters and setters:
 
 ```
-	//getters
+//getters
   public function getQuery(){return $this->queryString;}
   public function getFilename(){return $this->filename . '.json';}
   public function getFilePath(){return $this->filepath;}
   public function getData(){return $this->data;}
 	
-	//setters
+//setters
   public function setQuery($newQuery){$this->queryString = $newQuery;}
   public function setFileName($newFileName){$this->filename = $newFileName . ".json";}
   public function setFilePath($newFilePath){$this->filepath = $newFilePath;}
@@ -42,7 +43,7 @@ ALL accessable methods in this series of classes are able to be chained. (well w
 
 for the database class you have:
 ```
-	//getters
+  //getters
       public function getDBConnection(){return $this->dbC;}
   //check connection
       public function checkDBC(){return @mysqli_ping($this->dbC);}
@@ -55,9 +56,9 @@ The API.JsonifyMySQLRequests methods are pretty simple, they go in order, with t
 The jsonifyResults() takes $this->data and converts it into json object, It also corrects for numbers so that they are parsed correctly.
 The next function is the writeJSON() It has one parameter and it is not optional, you must give an 'a' or 'a+'for it to not throw an error to you. This is when teh file path and file name variables come into play... If you dont provide a path it will dump out to the root dir of the project. Otherwise give it a PREEXISTING dir path, as of now I dont have it making the dirs, You must have an directory that it can be placed or it will throw an exception. I may add the create dir ability later, but for now make sure that the path is good. If the file exists the file will be unlinked(deleted) and recreated, this is to help resolve some issues with the overall purpose of the class, If you would like comment out the :
 ```
-			if (file_exists($fp)) {
-        unlink($fp);
-      }
+   if (file_exists($fp)) {
+     unlink($fp);
+   }
 ```
 and it will keep appending to the end of the file...
 It then will open the file(creating it if it doesn't exist) , write to the file in a dump, and then close the file; then returns back to caller.
@@ -66,10 +67,10 @@ There is another function in here but It isnt really used and is not yet working
 
 As far as usage goes, it's is pretty straight forward:
 ```
-			//this is an example of how you can use setters to then create multiple .json files with different results
-			//reather than create new $api instances... Note though that once you close conection it is done and thus important not to
-			//run close connection until your done making files.
-			$connectionTest = $api->checkDBC();
+   //this is an example of how you can use setters to then create multiple .json files with different results
+   //reather than create new $api instances... Note though that once you close conection it is done and thus important not to
+   //run close connection until your done making files.
+      $connectionTest = $api->checkDBC();
       if ($connectionTest == 1) {
         echo "Connected successfully!<br />";
         echo $api->getFilePath() . "/" . $api->getFilename();
